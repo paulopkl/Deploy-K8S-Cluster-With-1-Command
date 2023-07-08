@@ -1,0 +1,350 @@
+---
+- hosts: all
+  become: true
+  name: Run a Kubernetes cluster
+  tasks:
+    # - name: Unhold kubeadm package from previous installations
+    #   dpkg_selections:
+    #     name: kubeadm
+    #     selection: install
+
+    # - name: Unhold kubelet package from previous installations
+    #   dpkg_selections:
+    #     name: kubelet
+    #     selection: install
+
+    # - name: Unhold kubectl package from previous installations
+    #   dpkg_selections:
+    #     name: kubectl
+    #     selection: install
+
+    # - name: Stop & disable containerd.io service from previous installations
+    #   service:
+    #     name: containerd
+    #     state: stopped
+    #     enabled: no
+    #   ignore_errors: true
+
+    # - name: Stop & disable Docker service from previous installations
+    #   service:
+    #     name: docker
+    #     state: stopped
+    #     enabled: no
+    #   ignore_errors: true
+
+    # - name: Stop & disable kubelet service from previous installations
+    #   service:
+    #     name: kubelet
+    #     state: stopped
+    #     enabled: no
+    #   ignore_errors: true
+
+    # - name: Uninstall Docker, Containerd & Kubernetes from previous installations
+    #   apt:
+    #     name:
+    #       - containerd.io
+    #       - kubelet=1.26.1-00
+    #       - kubeadm=1.26.1-00
+    #       - kubectl=1.26.1-00
+    #     state: absent
+
+    # - name: Remove Kubernetes APT key from previous installations
+    #   apt_key:
+    #     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    #     state: absent
+
+    # - name: Remove Kubernetes GPG keyring file from previous installations
+    #   file:
+    #     path: /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+    #     state: absent
+
+    # - name: Remove Kubernetes GPG keyring file from previous installations
+    #   file:
+    #     path: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+    #     state: absent
+
+    # - name: Remove Kubernetes APT repository from previous installations
+    #   file:
+    #     path: /etc/apt/sources.list.d/kubernetes.list
+    #     state: absent
+
+    # - name: Remove Docker APT repository file from previous installations
+    #   file:
+    #     path: /etc/apt/sources.list.d/docker.list
+    #     state: absent
+
+    # - name: Remove Docker GPG keyring file from previous installations
+    #   file:
+    #     path: /usr/share/keyrings/docker-archive-keyring.gpg
+    #     state: absent
+
+    # - name: Remove docker.list file from previous installations
+    #   file:
+    #     path: "/etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list"
+    #     state: absent
+
+    # - name: Remove docker.list.save file from previous installations
+    #   file:
+    #     path: "/etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list.save"
+    #     state: absent
+
+    ######################################
+    # - name: Append overlay and br_netfilter to containerd.conf
+    #   copy:
+    #     dest: /etc/modules-load.d/containerd.conf
+    #     content: |
+    #       overlay
+    #       br_netfilter
+    
+    # - name: Download CNI plugins archive
+    #   get_url:
+    #     url: "https://github.com/containernetworking/plugins/releases/download/v1.2.0/cni-plugins-linux-amd64-v1.2.0.tgz"
+    #     dest: "/tmp/cni-plugins-linux-amd64-v1.2.0.tgz"
+
+    # - name: Create CNI plugins directory
+    #   file:
+    #     path: "/opt/cni/bin"
+    #     state: directory
+
+    # - name: Extract CNI plugins archive
+    #   unarchive:
+    #     src: "/tmp/cni-plugins-linux-amd64-v1.2.0.tgz"
+    #     dest: "/opt/cni/bin"
+    #     remote_src: true
+    #     extra_opts: ["--strip-components=1"]
+
+    # - name: Update apt cache
+    #   apt:
+    #     update_cache: yes
+
+    # - name: Install apt-transport-https, ca-certificates, and curl
+    #   apt:
+    #     name:
+    #       - apt-transport-https
+    #       - ca-certificates
+    #       - curl
+    #       - lsb-release
+    #       # - software-properties-common
+    #     state: present
+    #     update_cache: yes
+
+    # - name: Download Kubernetes apt keyring
+    #   shell: curl -fsSL "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+
+    # - name: Add Kubernetes repository line
+    #   lineinfile:
+    #     path: /etc/apt/sources.list.d/kubernetes.list
+    #     line: "deb https://packages.cloud.google.com/apt kubernetes-xenial main"
+    #     create: yes
+
+    # - name: Update apt cache
+    #   apt:
+    #     update_cache: yes
+
+    # - name: Install Kubernetes packages on version 1.26.1-00
+    #   apt:
+    #     name:
+    #       - kubelet=1.26.1-00
+    #       - kubeadm=1.26.1-00
+    #       - kubectl=1.26.1-00
+    #       - kubernetes-cni
+    #     state: present
+    #     update_cache: yes
+
+    # ## Mark packages as held | apt-mark hold kubelet kubeadm kubectl ##
+    # - name: Hold kubeadm packages as hold
+    #   dpkg_selections:
+    #     name: kubeadm
+    #     selection: hold
+
+    # - name: Hold kubelet packages as hold
+    #   dpkg_selections:
+    #     name: kubelet
+    #     selection: hold
+
+    # - name: Hold kubectl packages as hold
+    #   dpkg_selections:
+    #     name: kubectl
+    #     selection: hold
+
+    # - name: Load overlay kernel module
+    #   command: modprobe overlay
+
+    # - name: Load br_netfilter kernel module
+    #   command: modprobe br_netfilter
+
+    # - name: Setup required sysctl params
+    #   copy:
+    #     dest: /etc/sysctl.d/99-kubernetes-cri.conf
+    #     content: |
+    #       net.bridge.bridge-nf-call-iptables  = 1
+    #       net.ipv4.ip_forward                 = 1
+    #       net.bridge.bridge-nf-call-ip6tables = 1
+
+    # - name: Apply sysctl settings
+    #   command: sysctl --system
+
+    # - name: Add Docker apt key (alternative for older systems without SNI).
+    #   shell: "curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+
+    # - name: Add docker apt repo
+    #   apt_repository:
+    #     repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_lsb.codename}} stable"
+    #     update_cache: yes
+
+    # - name: Install containerd.io package
+    #   apt:
+    #     name: containerd.io
+    #     state: present
+    #     update_cache: yes
+
+    # # - name: Create /etc/containerd directory
+    # #   file:
+    # #     path: /etc/containerd
+    # #     state: directory
+
+    # - name: Execute containerd command
+    #   command: containerd config default
+    #   register: containerd_output
+
+    # - name: Save output to file
+    #   copy:
+    #     content: "{{ containerd_output.stdout }}"
+    #     dest: /etc/containerd/config.toml
+
+    # - name: Update containerd configuration
+    #   replace:
+    #     path: /etc/containerd/config.toml
+    #     regexp: 'SystemdCgroup = false'
+    #     replace: 'SystemdCgroup = true'
+
+    # - name: Replace disabled_plugins with enabled_plugins change 'disabled_plugins = []' to 'enabled_plugins = ["cri"]'
+    #   replace:
+    #     path: /etc/containerd/config.toml
+    #     regexp: 'disabled_plugins = \[\"cri\"\]'
+    #     replace: 'disabled_plugins = []'
+
+    # - name: Reload systemd daemon
+    #   command: systemctl daemon-reload
+
+    # # sudo systemctl enable --now containerd
+    # - name: Enable & Restart containerd service
+    #   systemd:
+    #     name: containerd
+    #     state: restarted
+    #     enabled: yes
+
+    # - name: Comment out swap line in /etc/fstab
+    #   lineinfile:
+    #     path: /etc/fstab
+    #     regexp: '^(\s*.*\s+swap\s+.*)$'
+    #     line: '#\1'
+
+    # - name: Disable swap
+    #   command: swapoff -a
+    
+    # # iptables -F
+    # - name: Disable IPtables
+    #   command: iptables -F
+
+    # - name: Restart kubelet service
+    #   systemd:
+    #     name: kubelet
+    #     state: restarted
+    #     enabled: yes
+    
+    # ############################################
+    # ########## Control Plane - Master ##########
+    # ############################################
+    # # - name: Pull Kubernetes container images
+    # #   when: inventory_hostname in groups['k8s-master']
+    # #   command: kubeadm config images pull --cri-socket unix:///run/cri-dockerd.sock --kubernetes-version=v1.26.1
+
+    # - name: Initialize the Kubernetes cluster using kubeadm command
+    #   when: inventory_hostname in groups['k8s-master']
+    #   shell: sudo kubeadm init --upload-certs --pod-network-cidr=10.10.0.0/16 --kubernetes-version=v1.26.1 --control-plane-endpoint $(hostname -I | awk '{print $1}'):6443 --cri-socket unix:///run/containerd/containerd.sock --ignore-preflight-errors=NumCPU
+
+    # - name: Set up Kubernetes for current user
+    #   when: inventory_hostname in groups['k8s-master']
+    #   shell: |
+    #     mkdir -p $HOME/.kube
+    #     cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    #     chown $(id -u):$(id -g) $HOME/.kube/config
+    #     export KUBECONFIG=/etc/kubernetes/admin.conf
+
+    # ### CNI plugins ###
+    # # Flannel
+    # # - name: Install Flannel pod network
+    # #   when: inventory_hostname in groups['k8s-master']
+    # #   command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+
+    # # Tigera
+    # - name: Create tigera-operator using kubectl
+    #   when: inventory_hostname in groups['k8s-master']
+    #   command: kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
+
+    # # Calico
+    # - name: Download custom-resources.yaml
+    #   when: inventory_hostname in groups['k8s-master']
+    #   ansible.builtin.get_url: 
+    #     url: https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
+    #     dest: /tmp/custom-resources.yaml # Specify the directory where the file should be downloaded
+
+    # - name: Replace CIDR in custom-resources.yaml
+    #   when: inventory_hostname in groups['k8s-master']
+    #   replace:
+    #     path: /tmp/custom-resources.yaml
+    #     regexp: 'cidr: 192\.168\.0\.0/16'
+    #     replace: 'cidr: 10.10.0.0/16'
+
+    # - name: Apply custom resources
+    #   when: inventory_hostname in groups['k8s-master']
+    #   command: kubectl apply -f /tmp/custom-resources.yaml
+
+    # Kubernetes cluster configuration
+    - name: Retrieve Kubernetes join command that is used to join worker node(s) # kubeadm token create --print-join-command
+      when: inventory_hostname in groups['k8s-master']
+      command: kubeadm token create --print-join-command
+      register: join_token_output
+
+    ##############################################
+    ###### Worker Nodes - Join the cluster #######
+    ##############################################
+    - name: Debug join_command_output
+      debug:
+        var: join_token_output.stdout
+
+    # - name: save local
+    #   become: false
+    #   when: inventory_hostname in groups['k8s-master']
+    #   copy:
+    #     content: "{{ join_token_output.stdout }}"
+    #     dest: /tmp/hello.txt
+    #   delegate_to: localhost
+    
+    - name: Set join-command variable
+      when: inventory_hostname in groups['k8s-master']
+      set_fact:
+        join_command: "{{ join_token_output.stdout }}"
+
+    - name: Debug join_command
+      debug:
+        var: join_command
+
+    # - name: Copy join command to local file.
+    #   when: inventory_hostname in groups['k8s-worker']
+    #   local_action: copy content="{{ kubernetes_join_command.stdout_lines[0] }}" dest="/tmp/kubeadm-join.sh" mode=0777
+
+    - name: Copy the join-command file created above to worker node # scp join-command user@worker-node:/tmp/kubeadm-join.sh
+      when: inventory_hostname in groups['k8s-worker']
+      copy:
+        src: /tmp/hello.txt
+        dest: /tmp/kubeadm-join.sh
+        # content: | # content: "{{ join_token_output.stdout }}"
+        #   echo '123'
+        #   echo "batata"
+        mode: 0777
+
+    - name: Join the worker node to cluster # sh /tmp/kubeadm-join.sh
+      when: inventory_hostname in groups['k8s-worker']
+      command: sh /tmp/kubeadm-join.sh

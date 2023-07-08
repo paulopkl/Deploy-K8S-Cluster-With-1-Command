@@ -1,4 +1,4 @@
-# Deploy a Kubernetes Cluster (On Premise) with 1 Command
+# Deploy a Kubernetes Cluster (EC2 machines) with 1 Command
 
 ## Result:
 

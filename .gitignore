@@ -1,1 +1,4 @@
-Linkedin.txt
+./Linkedin.txt
+**/install.txt
+*/**/.terraform*
+*/**/terraform.tfstate*

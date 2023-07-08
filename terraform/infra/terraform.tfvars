@@ -1,0 +1,5 @@
+aws_region = "us-east-1"
+aws_ami_code = "ami-053b0d53c279acc90"
+aws_intance_type = "t3.medium"
+aws_key_pair_name = "raw-k8s-key-pair"
+aws_instance_user = "ubuntu"
